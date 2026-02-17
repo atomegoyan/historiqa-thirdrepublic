@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HistoriQA-ThirdRepublic</title>
+  <meta name="description" content="Multi-Hop Question Answering Corpus for Historical Research — Parliamentary Debates from the French Third Republic (1887)">
+  <style>
+    :root {
+      --primary: #2c3e50;
+      --accent: #c0392b;
+      --accent-light: #e74c3c;
+      --bg: #fafafa;
+      --card-bg: #ffffff;
+      --text: #333;
+      --text-light: #666;
+      --border: #e0e0e0;
+      --section-alt: #f5f5f5;
+      --gold: #d4a017;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.7;
+    }
+
+    /* ── Navigation ── */
+    nav {
+      background: var(--primary);
+      color: white;
+      padding: 0.8rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    nav .logo {
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: 0.5px;
+    }
+    nav .links a {
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+    nav .links a:hover { color: white; }
+
+    /* ── Hero ── */
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, #1a252f 100%);
+      color: white;
+      text-align: center;
+      padding: 4rem 2rem 3rem;
+    }
+    .hero h1 {
+      font-size: 2.6rem;
+      margin-bottom: 0.6rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .hero .subtitle {
+      font-size: 1.15rem;
+      color: rgba(255,255,255,0.8);
+      max-width: 700px;
+      margin: 0 auto 1.5rem;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 1rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin: 0.3rem;
+      text-decoration: none;
+    }
+    .badge-conference { background: var(--accent); color: white; }
+    .badge-hal { background: #8e44ad; color: white; }
+    .badge-license { background: #27ae60; color: white; }
+    .badge-dataset { background: var(--gold); color: white; }
+
+    .hero-image {
+      max-width: 820px;
+      width: 90%;
+      margin: 2rem auto 0;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    }
+
+    /* ── Sections ── */
+    section {
+      padding: 4rem 2rem;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    section.alt {
+      background: var(--section-alt);
+      max-width: 100%;
+    }
+    section.alt .inner {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    section h2 {
+      font-size: 1.8rem;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 3px solid var(--accent);
+      display: inline-block;
+    }
+    section h3 {
+      font-size: 1.2rem;
+      color: var(--primary);
+      margin: 1.5rem 0 0.8rem;
+    }
+    section p {
+      margin-bottom: 1rem;
+      color: var(--text);
+    }
+
+    /* ── Stat Cards ── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.2rem;
+      margin: 2rem 0;
+    }
+    .stat-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      border-top: 4px solid var(--accent);
+      transition: transform 0.2s;
+    }
+    .stat-card:hover { transform: translateY(-3px); }
+    .stat-card .number {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--accent);
+      display: block;
+    }
+    .stat-card .label {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      margin-top: 0.3rem;
+    }
+
+    /* ── Info Cards ── */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.2rem;
+      margin: 1.5rem 0;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: 10px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      border-left: 4px solid var(--accent);
+    }
+    .card h4 {
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+    .card p, .card ul {
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+    .card ul {
+      list-style: none;
+      padding: 0;
+    }
+    .card ul li::before {
+      content: "•";
+      color: var(--accent);
+      font-weight: bold;
+      margin-right: 0.4rem;
+    }
+
+    /* ── Source Table ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.92rem;
+    }
+    th {
+      background: var(--primary);
+      color: white;
+      padding: 0.7rem 1rem;
+      text-align: left;
+      font-weight: 600;
+    }
+    td {
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    tr:nth-child(even) { background: #f9f9f9; }
+    tr:hover { background: #f0f0f0; }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-block;
+      padding: 0.7rem 1.5rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin: 0.4rem;
+      transition: all 0.2s;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: white;
+    }
+    .btn-primary:hover {
+      background: var(--accent-light);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(192,57,43,0.3);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+    .btn-outline:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* ── Citation Block ── */
+    .citation-box {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 1.5rem;
+      border-radius: 10px;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 0.82rem;
+      overflow-x: auto;
+      position: relative;
+      line-height: 1.6;
+    }
+    .citation-box .copy-btn {
+      position: absolute;
+      top: 0.75rem;
+      right: 0.75rem;
+      background: rgba(255,255,255,0.15);
+      color: #ccc;
+      border: none;
+      padding: 0.3rem 0.7rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 0.75rem;
+    }
+    .citation-box .copy-btn:hover { background: rgba(255,255,255,0.25); }
+
+    /* ── Sunburst Section ── */
+    .viz-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+    .viz-item {
+      background: var(--card-bg);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    .viz-item h4 {
+      padding: 0.8rem 1rem 0;
+      color: var(--primary);
+      font-size: 0.95rem;
+    }
+    .viz-item iframe {
+      width: 100%;
+      height: 420px;
+      border: none;
+    }
+
+    /* ── Images ── */
+    .figure {
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+    .figure img {
+      max-width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    }
+    .figure figcaption {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      margin-top: 0.5rem;
+      font-style: italic;
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--primary);
+      color: rgba(255,255,255,0.7);
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.85rem;
+    }
+    footer a {
+      color: rgba(255,255,255,0.9);
+      text-decoration: none;
+    }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 1.8rem; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .viz-grid { grid-template-columns: 1fr; }
+      nav .links a { margin-left: 0.8rem; font-size: 0.8rem; }
+      section { padding: 2.5rem 1.2rem; }
+    }
+    @media (max-width: 480px) {
+      .stats { grid-template-columns: 1fr 1fr; }
+      nav { flex-direction: column; gap: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+  <div class="logo">HistoriQA-ThirdRepublic</div>
+  <div class="links">
+    <a href="#abstract">Abstract</a>
+    <a href="#paper">Paper</a>
+    <a href="#dataset">Dataset</a>
+    <a href="#methodology">Methodology</a>
+    <a href="#visualizations">Visualizations</a>
+    <a href="#benchmarks">Benchmarks</a>
+    <a href="#citation">Citation</a>
+    <a href="https://github.com/atomegoyan/historiqa-thirdrepublic">GitHub</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<div class="hero">
+  <h1>HistoriQA-ThirdRepublic</h1>
+  <p class="subtitle">Multi-Hop Question Answering Corpus for Historical Research<br>Parliamentary Debates from the French Third Republic (1887)</p>
+  <div>
+    <a href="https://lrec-coling-2026.org/" class="badge badge-conference">LREC-COLING 2026</a>
+    <a href="https://hal.science/hal-05438255" class="badge badge-hal">HAL hal-05438255</a>
+    <a href="https://creativecommons.org/licenses/by/4.0/" class="badge badge-license">CC-BY 4.0</a>
+    <a href="https://github.com/atomegoyan/historiqa-thirdrepublic/tree/main/dataset" class="badge badge-dataset">Dataset Available</a>
+  </div>
+  <img src="assets/images/main_visu.jpg" alt="HistoriQA-ThirdRepublic Overview" class="hero-image">
+</div>
+
+<!-- Abstract -->
+<section id="abstract">
+  <h2>Abstract</h2>
+  <p>
+    We present a French-language dataset of multi-hop historical questions derived from parliamentary debates and newspapers of the French Third Republic. Designed in collaboration with a historian, the corpus captures complex reasoning patterns typical of historical inquiry, including cross-source synthesis, temporal reasoning, and the integration of sparse evidence. The dataset emphasizes multi-hop connections across heterogeneous historical documents, providing a resource for evaluating retrieval-augmented and large language model systems in domain-specific contexts. While focused on French historical documents, our methodology can be readily adapted to other languages and national corpora.
+  </p>
+  <p>
+    <strong>Keywords:</strong> Digital Humanities · Question Answering · Multi-Hop Reasoning · Historical Corpus · French Language · Retrieval-Augmented Generation
+  </p>
+</section>
+
+<!-- Paper -->
+<section class="alt" id="paper">
+  <div class="inner">
+    <h2>Paper</h2>
+    <p>Our paper has been accepted at LREC-COLING 2026. Read the full paper for detailed methodology, experimental results, and analysis.</p>
+    <div style="margin-top: 1rem;">
+      <a href="assets/paper.pdf" class="btn btn-primary">📄 Download Paper (PDF)</a>
+      <a href="https://hal.science/hal-05438255v1/file/pellet_puren_perez_multihop2025.pdf" class="btn btn-outline">🔗 HAL Open Access</a>
+    </div>
+  </div>
+</section>
+
+<!-- Dataset -->
+<section id="dataset">
+  <h2>Dataset</h2>
+  <p>HistoriQA-ThirdRepublic is designed to evaluate RAG systems and LLMs on complex, domain-specific historical tasks requiring cross-source synthesis, temporal reasoning, and multi-hop connections.</p>
+
+  <div class="stats">
+    <div class="stat-card">
+      <span class="number">1,782</span>
+      <span class="label">Questions (897 SH + 885 MH)</span>
+    </div>
+    <div class="stat-card">
+      <span class="number">3,386</span>
+      <span class="label">Document chunks</span>
+    </div>
+    <div class="stat-card">
+      <span class="number">3</span>
+      <span class="label">Multi-hop types (Generic, Comparative, BridgeEntity)</span>
+    </div>
+    <div class="stat-card">
+      <span class="number">1887</span>
+      <span class="label">Year — French Third Republic</span>
+    </div>
+  </div>
+
+  <h3>Dataset Components</h3>
+  <div class="cards">
+    <div class="card">
+      <h4>📋 Question Dataset</h4>
+      <p><code>question_dataset.jsonl</code> — 1,782 questions with gold document references</p>
+      <ul>
+        <li>897 single-hop questions</li>
+        <li>541 Multi-hop — Generic</li>
+        <li>192 Multi-hop — Comparative</li>
+        <li>152 Multi-hop — BridgeEntity</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>📚 Corpus Dataset</h4>
+      <p><code>corpus_dataset.jsonl</code> — 3,386 document chunks from 3 sources</p>
+      <ul>
+        <li>3,229 parliamentary debate sections</li>
+        <li>78 Le Gaulois articles (monarchist)</li>
+        <li>79 L'Intransigeant articles (socialist)</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Historical Sources</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Source</th>
+        <th>Docs</th>
+        <th>Political Orientation</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Les Débats Parlementaires</strong></td>
+        <td>3,229</td>
+        <td>Official</td>
+        <td>Parliamentary debate sections — <em>Chambre des Députés</em></td>
+      </tr>
+      <tr>
+        <td><strong>Le Gaulois</strong></td>
+        <td>78</td>
+        <td>Monarchist / Conservative</td>
+        <td>Right-wing newspaper (~40,000 circulation)</td>
+      </tr>
+      <tr>
+        <td><strong>L'Intransigeant</strong></td>
+        <td>79</td>
+        <td>Socialist / Populist</td>
+        <td>Left-wing radical republican (~100,000+ circulation)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top: 1.5rem;">
+    <a href="https://github.com/atomegoyan/historiqa-thirdrepublic/tree/main/dataset" class="btn btn-primary">📦 Browse Dataset</a>
+    <a href="https://github.com/atomegoyan/historiqa-thirdrepublic" class="btn btn-outline">📂 View Repository</a>
+  </div>
+</section>
+
+<!-- Methodology -->
+<section class="alt" id="methodology">
+  <div class="inner">
+    <h2>Methodology</h2>
+    <p>Questions were generated using large language models (Cohere Command-R) with prompts developed iteratively in collaboration with a historian, emphasizing historical accuracy, substantive content, paraphrasing, and source diversity.</p>
+
+    <div class="cards">
+      <div class="card">
+        <h4>🔹 Single-Hop Generation</h4>
+        <ul>
+          <li>Select individual document chunks</li>
+          <li>Generate questions with refined prompts</li>
+          <li>TF-IDF semantic distance validation</li>
+          <li>Historian review for historical plausibility</li>
+        </ul>
+        <p style="margin-top:0.5rem">Optimized prompts achieved cosine distance of <strong>1.26</strong> (vs 1.04 baseline), confirming conceptual reformulation.</p>
+      </div>
+      <div class="card">
+        <h4>🔸 Multi-Hop Generation</h4>
+        <ul>
+          <li>Dense embeddings (Cohere embed-v4.0)</li>
+          <li>Cosine similarity filtering (≥ 0.7)</li>
+          <li>Temporal constraint: 7-day window for newspapers</li>
+          <li>UMAP visualization + historian validation</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Question Examples</h3>
+    <div class="cards">
+      <div class="card" style="border-left-color: #27ae60;">
+        <h4>Single-Hop Example</h4>
+        <p><em>"Quelles réformes M. Blanc propose-t-il dans son discours d'ouverture de session?"</em></p>
+        <p style="font-size:0.85rem; color: #888;">(What reforms does M. Blanc propose in his opening session speech?)</p>
+      </div>
+      <div class="card" style="border-left-color: #8e44ad;">
+        <h4>Multi-Hop Comparative Example</h4>
+        <p><em>"Quelle est la réaction de la presse monarchiste comparée à la presse socialiste?"</em></p>
+        <p style="font-size:0.85rem; color: #888;">(What is the reaction of the monarchist press compared to the socialist press?)</p>
+      </div>
+    </div>
+
+    <h3>Multi-Hop Question Types</h3>
+    <div class="cards" style="grid-template-columns: repeat(3, 1fr);">
+      <div class="card" style="text-align:center;">
+        <h4>BridgeEntity</h4>
+        <img src="assets/images/bridgeentity.png" alt="BridgeEntity" style="max-width:100%; border-radius:8px; margin-top:0.5rem;">
+      </div>
+      <div class="card" style="text-align:center;">
+        <h4>Comparative</h4>
+        <img src="assets/images/comparative.png" alt="Comparative" style="max-width:100%; border-radius:8px; margin-top:0.5rem;">
+      </div>
+      <div class="card" style="text-align:center;">
+        <h4>Generic</h4>
+        <img src="assets/images/generic.png" alt="Generic" style="max-width:100%; border-radius:8px; margin-top:0.5rem;">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Visualizations -->
+<section id="visualizations">
+  <h2>Interactive Visualizations</h2>
+  <p>Explore the question taxonomy through interactive sunburst charts. Click on segments to zoom in.</p>
+
+  <div class="viz-grid">
+    <div class="viz-item">
+      <h4>All Questions</h4>
+      <iframe src="assets/sunbursts/sunburst_all_questions.html" title="All Questions Sunburst"></iframe>
+    </div>
+    <div class="viz-item">
+      <h4>Multi-Hop — BridgeEntity</h4>
+      <iframe src="assets/sunbursts/sunburst_MH_-_BridgeEntity.html" title="BridgeEntity Sunburst"></iframe>
+    </div>
+    <div class="viz-item">
+      <h4>Multi-Hop — Comparative</h4>
+      <iframe src="assets/sunbursts/sunburst_MH_-_Comparative.html" title="Comparative Sunburst"></iframe>
+    </div>
+    <div class="viz-item">
+      <h4>Multi-Hop — Generic</h4>
+      <iframe src="assets/sunbursts/sunburst_MH_-_Generic.html" title="Generic Sunburst"></iframe>
+    </div>
+  </div>
+
+  <h3>Corpus Embedding Projections</h3>
+  <div class="cards">
+    <div class="figure">
+      <img src="assets/images/output.png" alt="Corpus embedding projection">
+      <figcaption>UMAP projection of document embeddings across the corpus</figcaption>
+    </div>
+  </div>
+</section>
+
+<!-- Benchmarks -->
+<section class="alt" id="benchmarks">
+  <div class="inner">
+    <h2>Benchmarks & Baselines</h2>
+    <p>For detailed results see the <a href="assets/paper.pdf">paper</a>. Key findings:</p>
+
+    <div class="stats">
+      <div class="stat-card">
+        <span class="number">~68%</span>
+        <span class="label">Single-hop Recall@3</span>
+      </div>
+      <div class="stat-card">
+        <span class="number">~36%</span>
+        <span class="label">Multi-hop Recall@3</span>
+      </div>
+      <div class="stat-card">
+        <span class="number">~54-59%</span>
+        <span class="label">Single-hop answer accuracy</span>
+      </div>
+      <div class="stat-card">
+        <span class="number">~14-19%</span>
+        <span class="label">Multi-hop answer accuracy</span>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h4>Key Observations</h4>
+        <ul>
+          <li>Multi-hop retrieval remains significantly more challenging than single-hop</li>
+          <li>Large generation performance drop from single-hop to multi-hop</li>
+          <li>Retrievers favor parliamentary debates even for newspaper-only queries</li>
+          <li>Cross-newspaper queries are particularly challenging</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Supported Use Cases</h4>
+        <ul>
+          <li>RAG benchmarking on domain-specific historical texts</li>
+          <li>Multi-hop compositional reasoning evaluation</li>
+          <li>Historical NLP & Digital Humanities</li>
+          <li>French language model evaluation</li>
+          <li>Cross-source information synthesis</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Citation -->
+<section id="citation">
+  <h2>Citation</h2>
+  <p>If you use this dataset in your research, please cite our paper:</p>
+
+  <div class="citation-box">
+    <button class="copy-btn" onclick="copyBibtex()">📋 Copy</button>
+<pre>@unpublished{pellet:hal-05438255,
+  TITLE = {{HistoriQA-ThirdRepublic: Multi-Hop Question Answering
+            Corpus for Historical Research, Parliamentary Debates
+            from the}},
+  AUTHOR = {Pellet, Aur{\'e}lien and Puren, Marie and Perez, Julien},
+  URL = {https://hal.science/hal-05438255},
+  NOTE = {working paper or preprint},
+  YEAR = {2026},
+  MONTH = Jan,
+  KEYWORDS = {Digital Humanities ; Question Answering ;
+              Language Representation Models ; Information Extraction ;
+              Information Retrieval ; Evaluation Methodologies ;
+              Corpus (Creation ; Annotation ; etc.)},
+  PDF = {https://hal.science/hal-05438255v1/file/
+         pellet_puren_perez_multihop2025.pdf},
+  HAL_ID = {hal-05438255},
+  HAL_VERSION = {v1},
+}</pre>
+  </div>
+</section>
+
+<!-- Code & Repository -->
+<section class="alt" id="repository">
+  <div class="inner">
+    <h2>Code & Repository</h2>
+    <p>
+      The complete dataset, paper PDF, and documentation are available in the
+      <a href="https://github.com/atomegoyan/historiqa-thirdrepublic">main branch</a>
+      of our GitHub repository. The repository uses branch separation: the <code>main</code> branch
+      contains all datasets and documentation, while the <code>gh-pages</code> branch hosts this site.
+    </p>
+    <div style="margin-top: 1rem;">
+      <a href="https://github.com/atomegoyan/historiqa-thirdrepublic" class="btn btn-primary">📂 View on GitHub</a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p>© 2026 Aurélien Pellet, Marie Puren, Julien Perez. Published at <a href="https://lrec-coling-2026.org/">LREC-COLING 2026</a>.</p>
+  <p style="margin-top: 0.5rem;">
+    <a href="https://github.com/atomegoyan/historiqa-thirdrepublic">GitHub</a> ·
+    <a href="https://hal.science/hal-05438255">HAL</a> ·
+    <a href="https://creativecommons.org/licenses/by/4.0/">CC-BY 4.0</a>
+  </p>
+</footer>
+
+<script>
+  // Smooth scrolling
+  document.querySelectorAll('nav a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  // Copy BibTeX
+  function copyBibtex() {
+    const text = document.querySelector('.citation-box pre').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.querySelector('.copy-btn');
+      btn.textContent = '✓ Copied!';
+      setTimeout(() => btn.textContent = '📋 Copy', 2000);
+    });
+  }
+</script>
+
+</body>
+</html>

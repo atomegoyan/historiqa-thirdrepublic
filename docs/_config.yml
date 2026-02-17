@@ -2,20 +2,10 @@ title: "HistoriQA-ThirdRepublic"
 description: "Multi-Hop Question Answering Corpus for Historical Research — Parliamentary Debates from the French Third Republic (1887)"
 baseurl: "/historiqa-thirdrepublic"
 url: "https://atomegoyan.github.io"
-theme: minima
 
 # Site metadata
 author:
   name: "Aurélien Pellet, Marie Puren, Julien Perez"
-
-# Navigation links shown in the header
-header_pages:
-  - index.md
-  - dataset.md
-  - methodology.md
-  - visualizations.md
-  - benchmarks.md
-  - cite.md
 
 # Markdown settings
 markdown: kramdown
@@ -26,3 +16,8 @@ kramdown:
 exclude:
   - README.md
   - LICENSE
+  - dataset.md
+  - methodology.md
+  - visualizations.md
+  - benchmarks.md
+  - cite.md

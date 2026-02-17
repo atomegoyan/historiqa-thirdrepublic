@@ -1,8 +1,13 @@
 # HistoriQA-ThirdRepublic : Multi-Hop Question Answering Corpus for Historical Research
 
+[![GitHub Pages](https://img.shields.io/badge/GitHub-Pages-blue)](https://atomegoyan.github.io/historiqa-thirdrepublic/)
+[![Paper](https://img.shields.io/badge/Paper-PDF-red)](paper/paper.pdf)
+[![HAL](https://img.shields.io/badge/HAL-hal--05438255-purple)](https://hal.science/hal-05438255)
 [![Dataset](https://img.shields.io/badge/Dataset-Available-green)](./dataset/)
-[![Paper](https://img.shields.io/badge/LREC%202026-Submission-orange)](https://lrec2026.info/)
+[![LREC 2026](https://img.shields.io/badge/LREC--COLING-2026-orange)](https://lrec-coling-2026.org/)
 [![License](https://img.shields.io/badge/License-CC--BY--4.0-blue.svg)](LICENSE)
+
+**Accepted at LREC-COLING 2026**
 
 ---
 
@@ -27,6 +32,38 @@ This repository contains **HistoriQA-ThirdRepublic**, a French-language dataset 
 We present a French-language dataset of multi-hop historical questions derived from parliamentary debates and newspapers of the French Third Republic. Designed in collaboration with a historian, the corpus captures complex reasoning patterns typical of historical inquiry, including cross-source synthesis, temporal reasoning, and the integration of sparse evidence. The dataset emphasizes multi-hop connections across heterogeneous historical documents, providing a resource for evaluating retrieval-augmented and large language model systems in domain-specific contexts. While focused on French historical documents, our methodology can be readily adapted to other languages and national corpora.
 
 **Keywords**: Digital Humanities, Question Answering, Multi-Hop Reasoning, Historical Corpus, French Language, Retrieval-Augmented Generation
+
+## Quick Links
+
+- 🌐 **[Project Page](https://atomegoyan.github.io/historiqa-thirdrepublic/)** — Interactive project site with visualizations
+- 📄 **[Paper](paper/paper.pdf)** — Full research paper (PDF)
+- 🔗 **[HAL Archive](https://hal.science/hal-05438255)** — Open-access preprint
+- 📊 **[Dataset](dataset/)** — Download questions and corpus (JSONL)
+
+### Repository Contents
+
+```
+.
+├── paper/
+│   └── paper.pdf                  # Research paper
+├── dataset/
+│   ├── question_dataset.jsonl     # 1,782 questions with gold documents
+│   └── corpus_dataset.jsonl       # 3,386 document chunks
+├── images/                        # Figures, prompts, and visualizations
+│   ├── sunburst_*.html            # Interactive sunburst charts
+│   ├── prompts/                   # Question generation prompt templates
+│   ├── question_display/          # Question examples with translations
+│   ├── corpus_projection/         # Embedding projections
+│   └── single_hop/                # Single-hop analysis figures
+├── docs/                          # GitHub Pages site source
+└── README.md                      # This file
+```
+
+## Getting Started
+
+1. **View the project page**: Visit the [project site](https://atomegoyan.github.io/historiqa-thirdrepublic/) for an interactive overview with sunburst visualizations
+2. **Download the dataset**: Get the JSONL files from the [`dataset/`](dataset/) folder
+3. **Read the paper**: See [`paper/paper.pdf`](paper/paper.pdf) for methodology, benchmarks, and analysis
 
 ---
 
@@ -387,6 +424,26 @@ This dataset is released under the **Creative Commons Attribution 4.0 Internatio
 - **Intended Use**: Academic research in NLP, information retrieval, and digital humanities
 - **Misuse Potential**: Not intended for generating historical misinformation or supporting anachronistic political claims
 
+---
+
+## Citation
+
+If you use this dataset in your research, please cite our paper:
+
+```bibtex
+@unpublished{pellet:hal-05438255,
+  TITLE = {{HistoriQA-ThirdRepublic: Multi-Hop Question Answering Corpus for Historical Research, Parliamentary Debates from the}},
+  AUTHOR = {Pellet, Aur{\'e}lien and Puren, Marie and Perez, Julien},
+  URL = {https://hal.science/hal-05438255},
+  NOTE = {working paper or preprint},
+  YEAR = {2026},
+  MONTH = Jan,
+  KEYWORDS = {Digital Humanities ; Question Answering ; Language Representation Models ; Information Extraction ; Information Retrieval ; Evaluation Methodologies ; Corpus (Creation ; Annotation ; etc.)},
+  PDF = {https://hal.science/hal-05438255v1/file/pellet_puren_perez_multihop2025.pdf},
+  HAL_ID = {hal-05438255},
+  HAL_VERSION = {v1},
+}
+```
 
 ---
 
